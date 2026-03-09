@@ -511,7 +511,59 @@
  <div id="scrollToTop" class="scrollToTop mbr-arrow-up"><a style="text-align: center;"><i class="mbr-arrow-up-icon mbr-arrow-up-icon-cm cm-icon cm-icon-smallarrow-up"></i></a></div>
     <input name="animation" type="hidden">
 
+<!-- DARK VINYL GLOBAL PLAYER -->
+<div id="vinylPlayer" style="position:fixed;bottom:20px;left:20px;width:70px;height:70px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:9999;">
+<div id="vinylDisc"></div>
+</div>
 
+<audio id="bgMusic" loop>
+<source src="chase.mp3" type="audio/mpeg">
+</audio>
+
+<style>
+#vinylPlayer{filter:drop-shadow(0 0 8px #8b0000)}
+#vinylDisc{
+width:60px;height:60px;border-radius:50%;
+background:radial-gradient(circle,#8b0000 8%,#000 9%,#000 18%,#111 19%,#000 30%,#111 31%,#000 45%,#111 46%,#000 60%,#111 61%,#000 75%);
+box-shadow:0 0 15px #8b0000,inset 0 0 10px #000;
+}
+.spin{animation:spin 4s linear infinite}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+#vinylPlayer::before{
+content:"";position:absolute;width:120px;height:120px;border-radius:50%;
+background:radial-gradient(circle,rgba(139,0,0,.35),transparent 70%);
+filter:blur(18px);z-index:-1;
+animation:fog 6s ease-in-out infinite alternate;
+}
+
+@keyframes fog{from{transform:scale(.9);opacity:.4}to{transform:scale(1.2);opacity:.8}}
+</style>
+
+<script>
+const music=document.getElementById("bgMusic");
+const vinyl=document.getElementById("vinylDisc");
+const player=document.getElementById("vinylPlayer");
+
+/* recuperar estado entre páginas */
+if(localStorage.getItem("musicPlaying")==="true"){
+music.play().catch(()=>{});
+vinyl.classList.add("spin");
+}
+
+/* botão play pause */
+player.onclick=()=>{
+if(music.paused){
+music.play().catch(()=>{});
+vinyl.classList.add("spin");
+localStorage.setItem("musicPlaying","true");
+}else{
+music.pause();
+vinyl.classList.remove("spin");
+localStorage.setItem("musicPlaying","false");
+}
+};
+</script>
     
   </body>
 </html>
